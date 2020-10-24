@@ -26,17 +26,34 @@
         videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
 
         // Posenet variables
-        const net = posenet.load().then((e) => {console.log('Posenet ready:', e);});
+        let posnetIsReady = false;
+        const net = posenet.load().then((e) => {posnetIsReady = true;});
 
         // getUserMedia variables
         const webcamVideo = document.createElement('video');
-        const constraints = { video: true };
+        const videoConstraints = { video: true };
+        const canvas = document.createElement('canvas');
+        let ctx;
 
-        navigator.mediaDevices.getUserMedia(constraints)
+        let videoWidth;
+        let videoHeight;
+
+        webcamVideo.setAttribute('autoplay', 'autoplay');
+
+        navigator.mediaDevices.getUserMedia(videoConstraints)
             .then(function(stream) {
                 
                 console.log(stream);
-                
+                videoWidth = stream.getVideoTracks()[0].getSettings().width;
+                videoHeight = stream.getVideoTracks()[0].getSettings().height;
+
+                console.log(videoWidth, videoHeight);
+
+                canvas.width = videoWidth;
+                canvas.height = videoHeight;
+
+                ctx = canvas.getContext('2d');
+
                 try{
                     const vidURL = window.URL.createObjectURL(stream);
                     webcamVideo.src = vidURL;
@@ -48,7 +65,12 @@
                 setTimeout(function(){
                     console.log('Video is playing', !webcamVideo.paused);
                     if(webcamVideo.paused){
-                        webcamVideo.play();
+                        
+                        setTimeout(function(){
+                            ctx.drawImage(webcamVideo, 0, 0);
+                            console.log(canvas.toDataURL('image/png'));
+                        }, 3500);
+
                     }
                 }, 1000);
 
