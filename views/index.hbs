@@ -2,7 +2,7 @@
 
 <script>
 
-    (function(){
+    (async function(){
 
         'use strict';
 
@@ -26,8 +26,7 @@
         videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
 
         // Posenet variables
-        let posnetIsReady = false;
-        const net = posenet.load().then((e) => {posnetIsReady = true;});
+        const net = await posenet.load()
 
         // getUserMedia variables
         const webcamVideo = document.createElement('video');
@@ -62,20 +61,21 @@
                     webcamVideo.srcObject = stream;
                 }
 
-                setTimeout(function(){
-                    console.log('Video is playing', !webcamVideo.paused);
-                    if(webcamVideo.paused){
-                        
-                        setTimeout(function(){
-                            ctx.drawImage(webcamVideo, 0, 0);
-                            console.log(canvas.toDataURL('image/png'));
-                        }, 3500);
-
-                    }
-                }, 1000);
-
             })
         ;
+
+        setInterval(async function(){
+
+            console.log('PING!');
+
+            const pose = await net.estimateSinglePose(webcamVideo, {
+                flipHorizontal: false
+            });
+
+            console.log(pose);
+
+
+        }, 1500);
 
         window.addEventListener('keyup', function(e){
             console.log(e.keyCode);
