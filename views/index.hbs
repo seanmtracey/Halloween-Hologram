@@ -1,0 +1,38 @@
+<video autoplay src=""></video>
+
+<script>
+
+    (function(){
+
+        'use strict';
+
+        const videos = [
+            "1_edit.mp4",
+            "2.mp4",
+            "3.mp4",
+            "4.mp4",
+            "5.mp4",
+            "6.mp4",
+            "7.mp4",
+            "8.mp4",
+            "9.mp4",
+            "10.mp4",
+            "11.mp4",
+        ];
+
+        const videoPlayer = document.body.querySelector('video');
+
+        videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
+
+        window.addEventListener('keyup', function(e){
+            console.log(e.keyCode);
+
+            if(e.keyCode === 70){
+                document.body.requestFullscreen();
+            }
+
+        }, false);
+
+    }());
+
+</script>
