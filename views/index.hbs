@@ -6,6 +6,8 @@
 
         'use strict';
 
+
+        // Video player variables
         const videos = [
             "1_edit.mp4",
             "2.mp4",
@@ -21,8 +23,37 @@
         ];
 
         const videoPlayer = document.body.querySelector('video');
-
         videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
+
+        // Posenet variables
+        const net = posenet.load().then((e) => {console.log('Posenet ready:', e);});
+
+        // getUserMedia variables
+        const webcamVideo = document.createElement('video');
+        const constraints = { video: true };
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function(stream) {
+                
+                console.log(stream);
+                
+                try{
+                    const vidURL = window.URL.createObjectURL(stream);
+                    webcamVideo.src = vidURL;
+                } catch(err){
+                    console.log('Unable to createObjectURL for stream. Setting srcObject to stream instead...');
+                    webcamVideo.srcObject = stream;
+                }
+
+                setTimeout(function(){
+                    console.log('Video is playing', !webcamVideo.paused);
+                    if(webcamVideo.paused){
+                        webcamVideo.play();
+                    }
+                }, 1000);
+
+            })
+        ;
 
         window.addEventListener('keyup', function(e){
             console.log(e.keyCode);
@@ -32,6 +63,7 @@
             }
 
         }, false);
+
 
     }());
 
