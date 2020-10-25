@@ -32,7 +32,6 @@
         const webcamVideo = document.createElement('video');
         const videoConstraints = { video: true };
         const canvas = document.createElement('canvas');
-        let ctx;
 
         let videoWidth;
         let videoHeight;
@@ -41,7 +40,7 @@
 
         navigator.mediaDevices.getUserMedia(videoConstraints)
             .then(function(stream) {
-                
+
                 console.log(stream);
                 videoWidth = stream.getVideoTracks()[0].getSettings().width;
                 videoHeight = stream.getVideoTracks()[0].getSettings().height;
