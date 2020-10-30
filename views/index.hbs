@@ -44,7 +44,7 @@
             
             videos.forEach(video => {
                 video.dataset.active = "false";
-            })
+            });
 
             currentVideoPlayer = videos[Math.random() * videos.length | 0 ];
             currentVideoPlayer.currentTime = 0;
