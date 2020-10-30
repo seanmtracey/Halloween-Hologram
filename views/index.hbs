@@ -35,6 +35,7 @@
 
         let videoWidth;
         let videoHeight;
+        let videoLastPlayed = 0;
 
         webcamVideo.setAttribute('autoplay', 'autoplay');
 
@@ -43,6 +44,7 @@
             videoPlayer.currentTime = 0;
             videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
             videoPlayer.play();
+            videoLastPlayed = new Date() / 1000;
 
         }
 
@@ -83,7 +85,13 @@
                 console.log(pose);
 
                 if(pose.score > 0.3){
-                    playSpookyVideo();
+                    
+                    const now = new Date() / 1000;
+
+                    if(now - videoLastPlayed > 30){
+                        playSpookyVideo();
+                    }
+
                 }
 
             }
