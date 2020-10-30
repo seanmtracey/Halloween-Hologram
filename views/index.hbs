@@ -38,6 +38,14 @@
 
         webcamVideo.setAttribute('autoplay', 'autoplay');
 
+        function playSpookyVideo(){
+            
+            videoPlayer.currentTime = 0;
+            videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
+            videoPlayer.play();
+
+        }
+
         navigator.mediaDevices.getUserMedia(videoConstraints)
             .then(function(stream) {
 
@@ -50,7 +58,7 @@
                 canvas.width = videoWidth;
                 canvas.height = videoHeight;
 
-                ctx = canvas.getContext('2d');
+                {{!-- document.body.appendChild(webcamVideo); --}}
 
                 try{
                     const vidURL = window.URL.createObjectURL(stream);
@@ -67,11 +75,19 @@
 
             console.log('PING!');
 
-            const pose = await net.estimateSinglePose(webcamVideo, {
-                flipHorizontal: false
-            });
+            if(videoPlayer.paused){
+                
+                const pose = await net.estimateSinglePose(webcamVideo, {
+                    flipHorizontal: false
+                });
+                console.log(pose);
 
-            console.log(pose);
+                if(pose.score > 0.3){
+                    playSpookyVideo();
+                }
+
+            }
+
 
 
         }, 1500);
