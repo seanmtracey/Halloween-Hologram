@@ -1,4 +1,14 @@
-<video autoplay src=""></video>
+<video preload data-active="false" src="/videos/1_edit.mp4"></video>
+<video preload data-active="false" src="/videos/2.mp4"></video>
+<video preload data-active="false" src="/videos/3.mp4"></video>
+<video preload data-active="false" src="/videos/4.mp4"></video>
+<video preload data-active="false" src="/videos/5.mp4"></video>
+<video preload data-active="false" src="/videos/6.mp4"></video>
+<video preload data-active="false" src="/videos/7.mp4"></video>
+<video preload data-active="false" src="/videos/8.mp4"></video>
+<video preload data-active="false" src="/videos/9.mp4"></video>
+<video preload data-active="false" src="/videos/10.mp4"></video>
+<video preload data-active="false" src="/videos/11.mp4"></video>
 
 <script>
 
@@ -6,24 +16,10 @@
 
         'use strict';
 
-
         // Video player variables
-        const videos = [
-            "1_edit.mp4",
-            "2.mp4",
-            "3.mp4",
-            "4.mp4",
-            "5.mp4",
-            "6.mp4",
-            "7.mp4",
-            "8.mp4",
-            "9.mp4",
-            "10.mp4",
-            "11.mp4",
-        ];
+        const videos = Array.from(document.body.querySelectorAll('video'));
 
-        const videoPlayer = document.body.querySelector('video');
-        videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
+        let currentVideoPlayer = document.querySelector('video');
 
         // Posenet variables
         const net = await posenet.load({
@@ -46,9 +42,15 @@
 
         function playSpookyVideo(){
             
-            videoPlayer.currentTime = 0;
-            videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
-            videoPlayer.play();
+            videos.forEach(video => {
+                video.dataset.active = "false";
+            });
+
+            currentVideoPlayer = videos[Math.random() * videos.length | 0 ];
+            currentVideoPlayer.currentTime = 0;
+            currentVideoPlayer.dataset.active = "true";
+
+            currentVideoPlayer.play();
             videoLastPlayed = new Date() / 1000;
 
         }
@@ -82,7 +84,7 @@
 
             console.log('PING!');
 
-            if(videoPlayer.paused){
+            if(currentVideoPlayer.paused){
                 
                 const pose = await net.estimateSinglePose(webcamVideo, {
                     flipHorizontal: false
@@ -103,7 +105,7 @@
 
 
 
-        }, 1500);
+        }, 5000);
 
         window.addEventListener('keyup', function(e){
             console.log(e.keyCode);
