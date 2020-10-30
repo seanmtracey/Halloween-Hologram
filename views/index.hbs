@@ -26,7 +26,12 @@
         videoPlayer.src = `/videos/${videos[Math.random() * videos.length | 0 ]}`;
 
         // Posenet variables
-        const net = await posenet.load()
+        const net = await posenet.load({
+            architecture: 'MobileNetV1',
+            outputStride: 16,
+            inputResolution: { width: 640, height: 480 },
+            multiplier: 0.75
+        });
 
         // getUserMedia variables
         const webcamVideo = document.createElement('video');
